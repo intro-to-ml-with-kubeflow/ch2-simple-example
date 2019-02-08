@@ -28,4 +28,7 @@ that this dataset exists _somewhere_ that the training docker image can access i
 determining where to put the data is "how big is the file", because each of the training dockers will have to download
 the data.
 
-For example, our
+The data example we provided is a tiny little baby data set- only 353 bytes large.  We could _probably_ download that
+over http.  But our data set is obviously contrived, we could do this linear regression by hand, and so would not need
+Kubeflow at all.
+
