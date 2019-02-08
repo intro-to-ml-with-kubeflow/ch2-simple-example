@@ -1,0 +1,31 @@
+== A Simple Linear Regression with `sklearn`
+
+There are _n-fill in_ pieces you need to create and end to end pipeline, no matter what cloud provider you are on at a
+minimum.  Those key components are:
+
+- Training Data
+- Docker Image for training the model
+- Place to store trained model
+- Docker Image for serving the model
+
+True, there more advanced ways to serve the model, doing A/B tests, and other fancy witchcraft of later chapters, but
+for now, let us do a simplest of models, a Linear Regression, and serve it.  Consider this the "Hello World" of Kubeflow.
+
+=== Training Data
+
+We can't train a model without any data, so let's start there.  For this simple example, we borrow a data set from the
+Apache Mahout Project's linear regression example.  A very short data set that lists breakfast cereals, their nutritional
+value and their rating.
+
+[format="csv", options="header"]
+|===
+include::data/cereal.csv[]
+|===
+
+Our goal is to create a model that predicts rating based on `protein`, `fat`, `carbo`, `sugars`.  A silly exercise to be
+sure.  You are free (and encouraged) to substitute in your own more exciting dataset.  The important thing for now is
+that this dataset exists _somewhere_ that the training docker image can access it.  An important consideration in
+determining where to put the data is "how big is the file", because each of the training dockers will have to download
+the data.
+
+For example, our
