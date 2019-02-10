@@ -16,6 +16,7 @@
 # under the License.
 
 import argparse
+import boto3
 import logging
 import os
 import pandas as pd
@@ -23,10 +24,12 @@ from sklearn.linear_model import LinearRegression
 
 
 BUCKET_NAME=os.getenv("BUCKET_NAME")
-KEY_NAME=os.getenv("MODEL_KEY_NAME")
-ACCESS_KEY=os.getenv("S3_ACCESS_KEY")
+MODEL_KEY_NAME=os.getenv("MODEL_KEY_NAME")
+ACCESS_KEY=os.getenv("S3_ACCESS_KEY_ID")
 SECRET_KEY=os.getenv("S3_SECRET_KEY")
-MODEL_NAME=os.getenv("MODEL_NAME")
+
+REGION_NAME=os.getenv("REGION_NAME")
+ENDPOINT_URL=os.getenv("ENDPOINT_URL")
 
 def read_local(filename):
     """
@@ -39,7 +42,20 @@ def read_local(filename):
     return(df)
 
 def read_s3(s3path):
-    pass
+    data_bucket = s3path.split("/")[2]
+    key = "/".join(s3path.split("/")[3:])
+    fname = s3path.split("/")[-1]
+    logging.info("Attemptiong to download %s from %s bucket to %s" % (key, data_bucket, fname))
+    s3 = boto3.resource(
+        service_name= 's3',
+        region_name=REGION_NAME,
+        endpoint_url=ENDPOINT_URL,
+        aws_access_key_id=ACCESS_KEY,
+        aws_secret_access_key=SECRET_KEY,
+    )
+    s3.Bucket(data_bucket).download_file(key, fname)
+    df = pd.read_csv(fname)
+    return df
 
 def read_http(url):
     """
@@ -72,20 +88,21 @@ def save_model(clf):
     :return:
     """
     import pickle as pkl
-    logging.info("Saving model %s" % MODEL_NAME + '.pkl')
-    with open(MODEL_NAME + ".pkl", 'wb') as f:
+    logging.info("Saving model %s" % MODEL_KEY_NAME + '.pkl')
+    with open("model.pkl", 'wb') as f:
         pkl.dump(clf, f)
-    import boto3
     # Get the service client
     s3 = boto3.client(
-        's3',
+        service_name= 's3',
+        region_name=REGION_NAME,
+        endpoint_url=ENDPOINT_URL,
         aws_access_key_id=ACCESS_KEY,
         aws_secret_access_key=SECRET_KEY,
     )
     # Upload tmp.txt to bucket-name at key-name
     ## Todo update these
-    bucket_name = "bucket-name"
-    key_name = "key-name"
+    bucket_name = BUCKET_NAME
+    key_name = MODEL_KEY_NAME
     s3.upload_file("model.pkl", bucket_name, key_name)
     return True
 
