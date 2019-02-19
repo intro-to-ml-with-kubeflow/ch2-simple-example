@@ -1,0 +1,11 @@
+MODEL_NAME=SimpleModel
+API_TYPE=REST
+SERVICE_TYPE=MODEL
+PERSISTENCE=0
+# AWS Stuff
+S3_ACCESS_KEY_ID=2457f813f32741468df1c82ac207f99c
+S3_SECRET_KEY=c504c6bf0a5cd2e58aa9f088f4fece4380ee1d5d371dd442
+BUCKET_NAME=test-bucket1001
+MODEL_KEY_NAME= something-silly
+REGION_NAME=us-geo
+ENDPOINT_URL=https://s3-api.us-geo.objectstorage.softlayer.net

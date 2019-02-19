@@ -1,0 +1,37 @@
+{
+  "features":[
+    {
+      "name":"protein",
+      "dtype":"FLOAT",
+      "ftype":"continuous",
+      "range":[0,10]
+    },
+    {
+      "name":"fat",
+      "dtype":"FLOAT",
+      "ftype":"continuous",
+      "range":[0,5]
+    },
+    {
+      "name":"carbo",
+      "dtype":"FLOAT",
+      "ftype":"continuous",
+      "range":[5,20]
+    },
+    {
+      "name":"sugars",
+      "dtype":"FLOAT",
+      "ftype":"continuous",
+      "range":[0,20]
+    }
+  ],
+  "targets":[
+    {
+      "name":"rating",
+      "dtype":"FLOAT",
+      "ftype":"continuous",
+      "range":[0,75],
+      "repeat":3
+    }
+  ]
+}
